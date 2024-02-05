@@ -15,7 +15,7 @@
       condition: event.meta is defined
       actions:
         - run_job_template:
-            name: {{ aapjobtemplatename }}
+            name: "{{ aapjobtemplatename }}"
             organization: Default
             extra_vars:
               trigger_type: event_has_meta
