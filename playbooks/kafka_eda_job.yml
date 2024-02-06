@@ -1,0 +1,11 @@
+---
+- name: Handle Kafka events sent from EDA
+  hosts: all
+
+  tasks:
+    - name: Debug the Kafka event data
+      ansible.builtin.debug:
+        var: ansible_eda.event.body
+    - name: Debug all EDA data
+      ansible.builtin.debug:
+        var: ansible_eda
