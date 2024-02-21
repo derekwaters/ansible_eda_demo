@@ -1,0 +1,46 @@
+---
+- name: Create Kafka Demo Deployment
+  hosts: localhost
+  connection: local
+  gather_facts: false
+
+  # NOTE: This playbook required my updated version of the infra.eda_configuration
+  # collection (https://github.com/derekwaters/eda_collection.git)
+
+  # Expected vars to pass to this script:
+  # eda_hostname, eda_username, eda_password
+  # kafkatopic, kafkahostname, kafkaport, kafkagroupid
+  # aaptemplatename, aaptoken
+  vars:
+    eda_projects:
+      - name: acs_kafka_demo
+        description: ACS Kafka Broker Demo
+        url: https://github.com/derekwaters/ansible_eda_demo
+    eda_decision_environments:
+      - name: acs_kafka_demo_de
+        description: ACS Kafka Broker Demo
+        image_url: "registry.redhat.io/ansible-automation-platform-24/de-supported-rhel8"
+    eda_rulebook_activations:
+      - name: acs_kafka_demo_listener
+        description: ACS Kafka Broker Demo
+        project: acs_kafka_demo
+        rulebook: kafka_trigger_job.yml
+        decision_environment: acs_kafka_demo_de
+        variables:
+          kafkatopic: "{{ kafkatopic }}"
+          kafkahostname: "{{ kafkahostname }}"
+          kafkaport: "{{ kafkaport }}"
+          kafkagroupid: "{{ kafkagroupid }}"
+          aapjobtemplatename: "{{ aaptemplatename }}"
+        restart_policy: always
+        is_enabled: True
+        state: present
+    eda_user_tokens:
+      - name: aap_token
+        description: Default AAP Access Token
+        token: "{{ aaptoken }}"
+  roles:
+    - infra.eda_configuration.user_token
+    - infra.eda_configuration.project
+    - infra.eda_configuration.decision_environment
+    - infra.eda_configuration.rulebook_activation
