@@ -11,7 +11,12 @@
         interval: 1
   rules:
     - name: Debug everything
-      condition: event is defined
+      condition: event.sys_id is defined
+      action:
+        debug:
+          var: event
+    - name: Debug everything else
+      condition: event.sys_id is not defined
       action:
         debug:
           var: event
