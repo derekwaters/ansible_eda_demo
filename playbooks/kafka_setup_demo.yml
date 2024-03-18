@@ -1,0 +1,109 @@
+---
+- name: Configure Kafka EDA demo
+  hosts: localhost
+  connection: local
+  vars:
+    controller_organizations:
+    - name: Kafka-Demo
+      description: Organization for managing the Kafka demo
+      state: present
+
+    controller_projects:
+    - name: Kafka-Demo
+      organization: Kafka-Demo
+      scm_branch: main
+      scm_type: git
+      scm_update_on_launch: 'yes'
+      scm_url: https://github.com/derekwaters/ansible_eda_demo
+      state: present
+    
+    controller_inventories:
+    - name: Kafka-Localhost
+      description: Kafka demo localhost
+      organization: Kafka-Demo
+      state: present
+
+    controller_hosts:
+    - name: Kafka-Localhost
+      description: Localhost for inventory
+      inventory: Kafka-Localhost
+      state: present
+      enabled: true
+      variables:
+        ansible_connection: local
+
+    controller_templates:
+    - name: Kafka-Run-Trigger
+      organization: Kafka-Demo
+      job_type: run
+      inventory: Kafka-Localhost
+      # This is required to use the ansible_eda var in the job
+      survey_enabled: true
+      project: Kafka-Demo
+      playbook: kafka_eda_job.yml
+    
+    controller_user_accounts:
+    - user: eda-demo
+      first_name: "EDA"
+      last_name: "Demo"
+      password: "Password1"
+      organization: Kafka-Demo
+      state: present
+
+    controller_roles:
+    - user: eda-demo
+      organization: Kafka-Demo
+      role: job_template_admin
+      state: present
+    - user: eda-demo
+      organization: Kafka-Demo
+      role: read
+      state: present
+
+    # EDA Definitions
+    eda_projects:
+    - name: Kafka-Listener
+      description: Kafka EDA Listener
+      url: https://github.com/derekwaters/ansible_eda_demo
+    
+    eda_
+    
+
+#kafkatopic: eda-topic
+#kafkahostname: 172.30.2.176
+#kafkaport: 9092
+#kafkagroupid: testing
+#aapjobtemplatename: ACS-Kafka-AAP-Integration
+
+
+
+
+  
+  roles:
+    - { role: infra.controller_configuration.organizations, when: controller_organizations is defined }
+    - { role: infra.controller_configuration.projects,      when: controller_projects is defined      }
+    - { role: infra.controller_configuration.inventories,   when: controller_inventories is defined   }
+    - { role: infra.controller_configuration.hosts,         when: controller_hosts is defined         }
+    - { role: infra.controller_configuration.templates,     when: controller_templates is defined     }
+    - { role: infra.controller_configuration.user_accounts, when: controller_user_accounts is defined }
+    - { role: infra.controller_configuration.roles,         when: controller_roles is defined         }
+
+    # 
+
+# Specify controller and eda host vars for authentication?
+#
+# Params needed:
+#  - kafka host, port, topic, group?
+# Collections needed:
+#  - infra.controller_configuration
+#  - infra.eda_configuration
+#  - ansible.controller
+# Create org, project, job template, user, role in AAP
+# create access token in AAP
+# Add access token to user in EDA?
+# add decision environment, project, activation
+  tasks:
+    - name: Generate application token
+
+    - name: Apply token to EDA user
+      

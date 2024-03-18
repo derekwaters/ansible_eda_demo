@@ -1,0 +1,8 @@
+---
+- name: Augment a ServiceNow Incident
+  hosts: localhost
+
+  tasks:
+    - name: Debug all vars
+      ansible.builtin.debug:
+        var: event
