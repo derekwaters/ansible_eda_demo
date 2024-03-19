@@ -5,4 +5,4 @@
   tasks:
     - name: Debug all vars
       ansible.builtin.debug:
-        var: event
+        var: ansible_eda
