@@ -10,19 +10,17 @@
         table: incident
         interval: 1
   rules:
-    - name: Debug everything
-      condition: event.sys_id is defined
-      action:
-        debug:
-          var: event
+    - name: Augment Incident
+      condition: event.cmdb_ci is defined
+      actions:
+        - debug:
+            var: event
+        - run_job_template:
+            organization: "midrange"
+            name: "augment-incident"
     - name: Debug everything else
-      condition: event.sys_id is not defined
+      condition: event.cmdb_ci is not defined
       action:
         debug:
           var: event
-    - name: Augment incident
-      condition: event.sys_id is defined
-      action:
-        run_job_template:
-          organization: "midrange"
-          name: "augment-incident"
+
