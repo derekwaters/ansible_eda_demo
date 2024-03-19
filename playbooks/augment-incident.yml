@@ -13,7 +13,7 @@
       ansible.builtin.set_fact:
         inc_sys_id: "{{ ansible_eda.event.sys_id }}"
     - name: Gather messages log
-      ansible.builtin.shell: "tail -200 /var/log/messages ? /tmp/{{ inc_number }}_messages.log"
+      ansible.builtin.shell: "tail -n 200 /var/log/messages > /tmp/{{ inc_number }}_messages.log"
       register: messages_log
     - name: Gather journal /var/log/messages
       ansible.builtin.shell: "journalctl -exu NetworkManager.service > /tmp/{{ inc_number }}_journal.log"
