@@ -28,9 +28,9 @@
         table_sys_id: "{{ inc_sys_id }}"
         attachments:
           - path: "/tmp/{{ inc_number }}_messages.log"
-            name: messages_log
+            name: "{{ inc_number }}_messages.log"
           - path: "/tmp/{{ inc_number }}_journal.log"
-            name: journal_log
+            name: "{{ inc_number }}_journal.log"
     - name: Update Incident with augmentation
       servicenow.itsm.api:
         instance:
