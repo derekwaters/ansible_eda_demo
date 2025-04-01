@@ -1,6 +1,7 @@
 ---
 - name: Debug an event
   hosts: localhost
+  connection: local
 
   tasks:
     - name: Debug all vars
